@@ -9,6 +9,8 @@ const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const expressHandlebars = require('express-handlebars');
 const expressValidator = require('express-validator')
+const server = require('http').createServer(app); // Sockets runs on server, not express
+const io = require('socket.io')(server);
 const flash = require('connect-flash');
 const passport = require('passport');
 const port = process.env.PORT || 3000;
@@ -75,6 +77,52 @@ app.use(expressValidator({
 // Routes
 app.use('/', routes);
 
-app.listen(port, () => {
-	console.log('>>> Express Connected <<<');
-})
+server.listen(port, () => {
+	console.log('>>> Server connected <<<');
+});
+
+let users = [];
+var numUsers = 0;
+
+// Socket.io connect
+io.on('connection', function(socket){
+	console.log('A user connected');
+
+	socket.on('set user', (data, callback) => {
+		if (users.indexOf(data) != -1) {
+			callback(false);
+		} else {
+			callback(true);
+			socket.username = data;
+			users.push(socket.username);
+			updateUsers();
+		}
+	});
+
+	socket.on('send message', function(data) {
+		io.emit('show message', { msg: data, user: socket.username });
+	});
+
+	socket.on('user is typing', function(data) {
+		// console.log(data);
+		io.emit('show status', { user: socket.username });
+	});
+
+	socket.on('user stopped typing', function(data) {
+		io.emit('hide status', { user: socket.username });
+	});
+
+	socket.on('disconnect', function(data) {
+		if (!socket.username) return;
+		users.splice(users.indexOf(socket.username), 1);
+		updateUsers();
+	});
+
+	function updateUsers() {
+		io.sockets.emit('users', users);
+	}
+});
+
+// app.listen(port, () => {
+// 	console.log('>>> Express Connected <<<');
+// })

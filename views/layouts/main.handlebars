@@ -85,7 +85,40 @@
 		</div>
 	</div>
 	{{{body}}}
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-4 col-md-offset-3">
+				<div id="mainWrap">
+					<h3>Discuss  <small id="status-bar"></small></h3>
+					<form id="chatForm">
+						<div class="well" id="chatWindow"></div>
+						<div class="form-group">
+							<textarea class="form-control" rows="4" id="chatInput" name="body" placeholder="Say Something..."></textarea><br>
+							<button class="btn btn-primary" type="submit">Send</button><br><br>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div id="error"></div>
+				<div id="userFormWrap">
+					<h4>Create Username</h4>
+					<form id="userForm">
+						<input class="form-control" id="username" type="text" placeholder="Enter Username...">
+						<br>
+						<button class="btn btn-default btn-sm" type="submit">Join</button>
+					</form>
+				</div>
+				<h3>Chat Users</h3>
+				<ul class="list-group">
+					<div id="users"></div>
+				</ul>
+			</div>
+		</div>
+	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>	
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/javascript/check.js"></script>
 </body>
 </html>
