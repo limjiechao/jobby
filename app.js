@@ -11,7 +11,7 @@ const expressHandlebars = require('express-handlebars');
 const expressValidator = require('express-validator')
 const flash = require('connect-flash');
 const passport = require('passport');
-const port = 1234;
+const port = process.env.PORT || 3000;
 
 const routes = require('./routes/routes');
 const dbConfig = require('./config/dbConfig');
